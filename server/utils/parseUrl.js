@@ -15,10 +15,11 @@ export function parseUrl(event) {
       rawTargetUrl = `https://${rawTargetUrl}`;
     }
     const targetUrl = new URL(rawTargetUrl);
-    if (!isValidTLD(targetUrl) && !isIP(targetUrl)) {
+    if (isValidTLD(targetUrl) || isIP(targetUrl)) {
+      return targetUrl.toString();
+    } else {
       return false;
     }
-    return targetUrl.toString();
   } catch {
     return false;
   }
@@ -30,11 +31,11 @@ export function parseUrl(event) {
  * @returns {boolean}
  */
 function isValidTLD(url) {
-const hostname = url.hostname;
+  const hostname = url.hostname;
   if (hostname.includes(".") && !hostname.startsWith(".") && !hostname.endsWith(".")) {
-  const tld = url.hostname.split(".").pop().toUpperCase();
-  return tldList.has(tld);
-} else {
+    const tld = url.hostname.split(".").pop().toUpperCase();
+    return tldList.has(tld);
+  } else {
     return false;
   }
 }
